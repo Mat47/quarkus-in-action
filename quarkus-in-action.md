@@ -309,3 +309,7 @@ communicating between reservation and rental service via `@RestClient RentalClie
 
 - acts as GraphQL server
 - `@GraphQLApi`
+
+# gRPC
+
+4.6 
