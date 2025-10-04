@@ -255,13 +255,13 @@ Exposing & consuming APIs using these network protocols
 - GraphQL (good for limiting #requests where amount of transferred data is critical)
 - gRPC (high-performance, open source universal RPC framework)
 
-# Car Rental Microservices:
+# Car Rental Microservices
 
-localhost:8080 => Users
-localhost:8081 => Reservation
-localhost:8082 => Rental
-localhost:8083 => Inventory
-localhost:8084 => Billing
+- localhost:8080 => Users
+- localhost:8081 => Reservation
+- localhost:8082 => Rental
+- localhost:8083 => Inventory
+- localhost:8084 => Billing
 
 # REST
 
@@ -299,4 +299,13 @@ communicating between reservation and rental service via `@RestClient RentalClie
     - `Subscription`: stream of responses in which items appear over time; use for events on the data; usually
       implemented using WebSockets
 
-4.5.4 Consuming the Inventory service using a GraphQL client tbc
+`Reservation`
+
+- acts as GraphQL client (typesafe or dynamic)
+- `@GraphQLClientApi(configKey = "inventory")`
+- app.props: `quarkus.smallrye-graphql-client.inventory.url=http://localhost:8083/graphql`
+
+`Inventory`
+
+- acts as GraphQL server
+- `@GraphQLApi`

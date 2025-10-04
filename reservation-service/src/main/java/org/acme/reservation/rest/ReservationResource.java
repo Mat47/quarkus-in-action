@@ -1,9 +1,11 @@
 package org.acme.reservation.rest;
 
 import io.quarkus.logging.Log;
+import io.smallrye.graphql.client.GraphQLClient;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.reservation.inventory.Car;
+import org.acme.reservation.inventory.GraphQLInventoryClient;
 import org.acme.reservation.inventory.InventoryClient;
 import org.acme.reservation.rental.RentalClient;
 import org.acme.reservation.reservation.Reservation;
@@ -25,11 +27,11 @@ public class ReservationResource {
     private final RentalClient rentalClient;
 
     public ReservationResource(
-            ReservationsRepository reservationsRepository,
-            InventoryClient inventoryClient,
+            ReservationsRepository reservations,
+            @GraphQLClient("inventory") GraphQLInventoryClient inventoryClient,
             @RestClient RentalClient rentalClient
     ) {
-        this.reservationsRepository = reservationsRepository;
+        this.reservationsRepository = reservations;
         this.inventoryClient = inventoryClient;
         this.rentalClient = rentalClient;
     }
@@ -44,7 +46,7 @@ public class ReservationResource {
 
         Map<Long, Car> carsById = new HashMap<>();
         for (Car car : availableCars) {
-            carsById.put(car.id(), car);
+            carsById.put(car.id, car);
         }
 
         var reservations = reservationsRepository.findAll();
