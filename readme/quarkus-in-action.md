@@ -29,7 +29,7 @@ Service service;
 
 --- 
 
-## Quarkus in Action (eBook/pdf)
+# Quarkus in Action (eBook/pdf)
 
 A “Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries
 and standards”.
@@ -41,24 +41,30 @@ Imperative & Reactive programming paradigms work seamlessly together.
 
 # Quarkus architecture
 
-- Execution environment
-  JIT / HotSpot (JVM)
-  AOT / GraalVM Native Image: compiles .java into native binaries
-- Core
-  Jandex: indexing of classes to a class model representation that is mem efficient & fast to search
-  Gizmo: a bytecode (= javac output the JVM executes) manipulation lib
-  Graal SDK
-  Config: extensions for build- or runtime features
-  ArC: the dependency injection framework (implements the CDI spec)
-- Extensions
-  REST
-  Netty
-  Hibernate Validator
-  ...
+### Execution environment
 
-## Demo app "Acme Car Rental" (https:#github.com/xstefank/quarkus-in-action)
+- JIT / HotSpot (JVM)
+- AOT / GraalVM Native Image: compiles .java into native binaries
 
-Uses different communication technologies (REST, GraphQL, RabbitMQ, Kafka, gRPC) between independent (micro)services.
+### Core
+
+- Jandex: indexing of classes to a class model representation that is mem efficient & fast to search
+- Gizmo: a bytecode (= javac output the JVM executes) manipulation lib
+- Graal SDK
+- Config: extensions for build- or runtime features
+- ArC: the dependency injection framework (implements the CDI spec)
+
+### Extensions
+
+- REST
+- Netty
+- Hibernate Validator
+- ...
+
+# Demo app "Acme Car Rental"
+
+- https:#github.com/xstefank/quarkus-in-action
+- Uses different communication technologies (REST, GraphQL, RabbitMQ, Kafka, gRPC) between independent (micro)services.
 
 ## Create (1st) Quarkus app via
 
@@ -75,7 +81,7 @@ The generated project has std (Java) Maven structure
 - src/test/java
 - Maven wrapper: a set of files (mvnw, mvnw.cmd, .mvn) to allow project build without having mvn installed
 
-# pom.xml
+## pom.xml
 
 	<dependencies>
 	Quarkus extensions (groupId "io.quarkus") are implicitly included; versions are collectlively defined in the Quarkus Bill of Materials (BOM) -> <dependencyManagement> -> ensures that all extensions are guaranteed to work together
@@ -87,7 +93,7 @@ The generated project has std (Java) Maven structure
 	<profiles>
 	- native (GraalVM executable file)
 
-# generated code & resources
+## generated code & resources
 
 - the `quarkus-rest` extension (as every extension may do) contributes some sample code => GreetingResource.java
 - src/main/resources/application.properties: default config location; 1 of possibly many config properties (env
@@ -97,7 +103,7 @@ The generated project has std (Java) Maven structure
   test because the JVM runs - unit tests in the same JVM - separately from the quarkus app artifact - only way to
   execute tests next to a native image/container is to run them in their own JVM)
 
-# Run the app (with normal JDK `java -jar`)
+## Run the app (with normal JDK `java -jar`)
 
 `$ ./mvnw quarkus:dev` or `$ quarkus dev` (Quarkus CLI)
 => dev mode dynamically recompiles & runs the app without manual building/packaging
@@ -110,7 +116,7 @@ For platform packaging:
 `$ java -jar target/quarkus-app/quarkus-run.jar` runs app in "prod mode" (this no longer includes dev mode welcome page
 http:#localhost:8080/q/dev-ui/welcome)
 
-# Native compilation with GraalVM (a "high-performance JDK")
+## Native compilation with GraalVM (a "high-performance JDK")
 
 GraalVM's main feature: native-image = AoT Java-to-binary compilation specific to a CPU architecture and OS
 
@@ -121,13 +127,13 @@ interpret bytecode into machine code
 Native compulation & execution:
 e.g. mvn package -Pnative => .java classes => machine code => computer directly runs machine code (without a JVM)
 
-# Packaging Quarkus as a native executable (with container build)
+## Packaging Quarkus as a native executable (with container build)
 
 `$ ./mvnw package -Pnative` or `$ quarkus build --native` (uses container - docker, podman - build if GRAALVM_HOME is
 not set)
 => creates native exe (linux binary): `$ ./target/quarkus-in-action-1.0.0-SNAPSHOT-runner`
 
-# Performance brrr
+## Performance brrr
 
 Quarkus does build-time (AoT) instead of runtime processing
 
@@ -142,7 +148,7 @@ during runtime:
 
 - execute code
 
-# JVM (JIT) vs compile-to-native (AoT)
+## JVM (JIT) vs compile-to-native (AoT)
 
 depends on target use case; JVM JIT compiler optimises code during runtime (hot spot detection, method inlining, dead
 code elimination, ...) ev. outperforming statically compiled (AoT) native images
@@ -161,11 +167,11 @@ Native
 - low mem usage
 - for serverless and short-lived tasks
 
-# Building container images
+## Building container images
 
 see comments in respective Dockerfile (src/main/docker)
 
-# Extensions
+## Extensions
 
 - from a dev's pov: a module providing additional funcitonality by integrating a lib or framework with the quarkus core
 - are managed as mvn dependencies
@@ -176,8 +182,6 @@ add:    $ quarkus ext add "<artifact-id>"
 remove: $ quarkus ext remove "<artifact-id>"
 
 Quarkiverse: a community-driven extension hub
-
-#
 
 # Enhancing DX
 
@@ -234,7 +238,7 @@ Tightly integrated with JUnit5
 
 *** 
 
-# Developing Quarkus Apps
+# [2] Developing Quarkus Apps
 
 Quarkus integrates most popular Java frameworks & libs
 
@@ -245,7 +249,7 @@ Quarkus integrates most popular Java frameworks & libs
 - DB access
 - Reactive programming
 
-# Handling communications
+## Handling communications
 
 we will focus on synchronous client-server communication
 
@@ -255,7 +259,9 @@ Exposing & consuming APIs using these network protocols
 - GraphQL (good for limiting #requests where amount of transferred data is critical)
 - gRPC (high-performance, open source universal RPC framework)
 
-# Car Rental Microservices
+![img.png](system_architecture.png)
+
+## Car Rental Microservices
 
 - localhost:8080 => Users
 - localhost:8081 => Reservation
@@ -263,7 +269,7 @@ Exposing & consuming APIs using these network protocols
 - localhost:8083 => Inventory
 - localhost:8084 => Billing
 
-# REST
+## REST
 
 the `quarkus-rest` ext is used for server side and impl. JAX-RS (annotations)
 
@@ -289,7 +295,7 @@ ReservationResource
 
 communicating between reservation and rental service via `@RestClient RentalClient` - see ReservationResource.java
 
-# GraphQL
+## GraphQL
 
 - a client query language that avoids over-/under-fetching => decreases # requests hence network traffic
 - well suited for resource-restricted environments e.g. mobile apps
@@ -310,6 +316,17 @@ communicating between reservation and rental service via `@RestClient RentalClie
 - acts as GraphQL server
 - `@GraphQLApi`
 
-# gRPC
+## gRPC
 
-4.6 
+- an open source framework for remote process communications
+- more compact and efficient than HTTP - uses binary protocol
+- gRPC (and HTTP/2) support(s) multiplexing - multiple concurrent requests before receiving responses
+- HTTP/1 does not support multiplexing - requests / responses are serialized one after another
+
+### Protocol Buffers - protobuf
+
+- language-independent binary (or text) message format
+- smaller and faster to (de)serialize than JSON (but not human-readable)
+- has schema definition - `.proto` file
+
+`quarkus-grpc` ext to generate Java code from .proto files
