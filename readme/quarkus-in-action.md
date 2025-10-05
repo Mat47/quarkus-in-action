@@ -305,16 +305,18 @@ communicating between reservation and rental service via `@RestClient RentalClie
     - `Subscription`: stream of responses in which items appear over time; use for events on the data; usually
       implemented using WebSockets
 
-`Reservation`
+### `Reservation`
 
 - acts as GraphQL client (typesafe or dynamic)
 - `@GraphQLClientApi(configKey = "inventory")`
 - app.props: `quarkus.smallrye-graphql-client.inventory.url=http://localhost:8083/graphql`
 
-`Inventory`
+### `Inventory`
 
 - acts as GraphQL server
 - `@GraphQLApi`
+
+send request (HTTPie): `$ http :8081/reservation/availability`
 
 ## gRPC
 
@@ -329,4 +331,29 @@ communicating between reservation and rental service via `@RestClient RentalClie
 - smaller and faster to (de)serialize than JSON (but not human-readable)
 - has schema definition - `.proto` file
 
-`quarkus-grpc` ext to generate Java code from .proto files
+add `quarkus-grpc` ext to [generate Java code from .proto file(s)](../inventory-service/src/main/proto/inventory.proto)
+via `$ mvn clean package`
+
+(quarkus-grpc replaces StreamObserver API - used by protoc compiler - with Mutiny)
+
+=> Implement generated `InventoryService` to expose it via gRPC
+
+generated RPC methods `add()`, `remove()` returning `Uni` (= stream that emits a single item or a failure)
+
+gRPC server automatically starts on port 9000 - send request via Dev UI / gRPC Services (does not require implementing a
+client or use external tools like `grpcurl`)
+
+### gRPC & Streams
+
+return multiple responses (`stream`) instead of `Uni`
+
+#### 4 basic classes of gRPC services
+
+- `Unary` - single request, single response
+- `Server streaming` - returning n responses per call
+- `Client streaming` - returning n responses per call
+- `Bidirectional streaming`
+
+#### Multi (Mutiny)
+
+as in-/output type wrapper
