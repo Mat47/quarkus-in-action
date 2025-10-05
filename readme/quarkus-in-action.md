@@ -1,35 +1,6 @@
-🔌 Contexts & Dependency Injection (CDI)
+#### Quarkus in Action (eBook/pdf)
 
-- bean = container-managed (via Annotations) object that supports DI, lifecycle callbacks, interceptors
-- every bean has exactly 1 scope
-- types of beans
-  Class beans
-  Producer methods
-  Producer fields
-  Synthetic beans
-
-```java 
-
-@Inject
-Service service; 
-``` 
-
-🧪 Testing
-
-- JUnit 5
-- REST-assured
-
-🛠️ Quarkus-specific APIs
-
-- Panache (persistence)
-- Qute (templating)
-
-🙌 Reactive
-...
-
---- 
-
-# Quarkus in Action (eBook/pdf)
+# [1] 📚 🚀
 
 A “Kubernetes Native Java stack tailored for OpenJDK HotSpot and GraalVM, crafted from the best of breed Java libraries
 and standards”.
@@ -350,10 +321,20 @@ return multiple responses (`stream`) instead of `Uni`
 #### 4 basic classes of gRPC services
 
 - `Unary` - single request, single response
-- `Server streaming` - returning n responses per call
-- `Client streaming` - returning n responses per call
-- `Bidirectional streaming`
+- `Server streaming` - returning n responses per call *
+- `Client streaming` - returning n responses per call **
+- `Bidirectional streaming` * ** - `Multi` as in-/output type wrapper
 
-#### Multi (Mutiny)
+### Using a gRPC client - `inventory-cli`
 
-as in-/output type wrapper
+- `quarkus.grpc.clients.{client-name}.host` - the target server host
+- `quarkus.grpc.clients.{client-name}.port` - the target server port
+
+impl: `InventoryCommand.java`
+
+send request: `$ java -jar target/quarkus-app/quarkus-run.jar add KNIGHT Pontiac TransAM`
+
+# [3] Quarkus in the cloud and beyond
+
+tbd 
+ 
