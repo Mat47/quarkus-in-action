@@ -220,7 +220,7 @@ Quarkus integrates most popular Java frameworks & libs
 - DB access
 - Reactive programming
 
-## Handling communications
+## 4 - Handling communications
 
 we will focus on synchronous client-server communication
 
@@ -333,6 +333,32 @@ return multiple responses (`stream`) instead of `Uni`
 impl: `InventoryCommand.java`
 
 send request: `$ java -jar target/quarkus-app/quarkus-run.jar add KNIGHT Pontiac TransAM`
+
+## 5 - Testing
+
+### @QuarkusTest
+
+enables CDI injection
+
+### Native testing - @QuarkusIntegrationTest
+
+- Quarkus' 1st class integration with GraalVM and compiling into native binaries naturally extends to testing as well
+- possible to run same tests in JVM and native mode
+- Mocking, CDI and continuous testing are not supported in native mode - need to execute separate maven (or gradle)
+  build
+
+Unit vs Integration test (JVM vs Native mode)
+![img.png](img.png)
+
+create a @QuarkusIntegrationTest and an existing JVM test - run it `$ ./mvnw verify -Pnative`
+
+### Mocking
+
+technique used to run high-level test programs that include components not suitable for the test env (e.g. costly
+services)
+
+- mocking with CDI beans (replacing implementations)
+- Mockito (framework)
 
 # [3] Quarkus in the cloud and beyond
 
