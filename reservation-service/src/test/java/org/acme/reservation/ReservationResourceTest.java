@@ -1,9 +1,9 @@
 package org.acme.reservation;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.http.TestHTTPEndpoint;
 import io.quarkus.test.common.http.TestHTTPResource;
 import io.quarkus.test.junit.DisabledOnIntegrationTest;
-import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -31,6 +31,9 @@ class ReservationResourceTest {
     @TestHTTPResource("availability")
     URL availability;
 
+    @InjectMock
+    GraphQLInventoryClient mockInventoryClient;
+
     @Test
     void testReservationIds() {
         var reservation = new Reservation(
@@ -53,16 +56,11 @@ class ReservationResourceTest {
 
     @Test
     @DisabledOnIntegrationTest(forArtifactTypes = DisabledOnIntegrationTest.ArtifactType.NATIVE_BINARY)
-    void testMakingAReservationAndCheckAvailability() {
-        GraphQLInventoryClient mock = Mockito.mock(GraphQLInventoryClient.class);
-
+    void making_a_reservation_and_check_availability() {
         var peugeot = new Car(1L, "ABC123", "Peugeot", "406");
 
-        Mockito.when(mock.allCars())
+        Mockito.when(mockInventoryClient.allCars())
                 .thenReturn(List.of(peugeot));
-
-        // override the GraphQLInventoryClient CDI bean implementation
-        QuarkusMock.installMockForType(mock, GraphQLInventoryClient.class);
 
         var startDate = "2022-01-01";
         var endDate = "2022-01-10";
