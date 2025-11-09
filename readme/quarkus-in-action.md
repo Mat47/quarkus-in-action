@@ -357,8 +357,47 @@ create a @QuarkusIntegrationTest and an existing JVM test - run it `$ ./mvnw ver
 technique used to run high-level test programs that include components not suitable for the test env (e.g. costly
 services)
 
-- mocking with CDI beans (replacing implementations)
-- Mockito (framework)
+#### Replacing implementations (CDI beans)
+
+`@Alternative` along with `@Priority(1)` => Quarkus built-in `@Mock`
+
+```java 
+// CDI container now chooses this impl over the GraphQLInventoryClient one
+@Mock
+public class MockInventoryClient implements GraphQLInventoryClient
+```
+
+#### _Mockito_ (framework)
+
+```xml
+<!-- Mockito -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-junit5-mockito</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+# DB access
+
+## Transactions
+
+- important for data access in distributed environments
+- Quarkus (has integrated transaction manager and) transitively includes transactions when needed
+- handling txs
+    - declarative: `TxType.REQUIRED, .REQUIRES_NEW, ...`
+    - manual: `QuarkusTransaction.begin(), .commit(), ...`
+
+### TXs with Panache
+
+- every op that modifies the db (persist, update) must execute inside a tx
+- Hibernate requires the tx to propagate the in-memory changes into the downstream db
+- changes made to an entity propagate to the db in a batch ("flush") => actual SQL
+- Hibernate _**flushes**_ at the end of each tx (before committing it)
+
+#### checked (handled) exception => commits
+
+#### runtime exception => rollbacks
 
 # [3] Quarkus in the cloud and beyond
 

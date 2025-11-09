@@ -13,12 +13,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest // enables CDI
 public class ReservationRepositoryTest {
 
-    @Inject // resolves to `InMemoryReservationsRepository` - only available CDI bean
-    ReservationsRepository repository;
+    @Inject // resolves to `InMemoryReservationsRepository` - the only available CDI bean
+    ReservationsRepository reservationRepo;
 
     @Test
     public void testCreateReservation() {
-        var reservation = repository.save(new Reservation(
+        var reservation = reservationRepo.save(new Reservation(
                 null,
                 348L,
                 LocalDate.now().plusDays(5),
@@ -27,7 +27,7 @@ public class ReservationRepositoryTest {
 
         assertAll(
                 () -> assertNotNull(reservation.id()),
-                () -> assertTrue(repository.findAll().contains(reservation))
+                () -> assertTrue(reservationRepo.findAll().contains(reservation))
         );
     }
 

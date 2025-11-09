@@ -9,6 +9,10 @@ public record Reservation(
         LocalDate endDay
 ) {
 
+    public Reservation(long carId, LocalDate start, LocalDate end) {
+        this(null, carId, start, end);
+    }
+
     public boolean isReserved(LocalDate startDay, LocalDate endDay) {
         return !(this.endDay.isBefore(startDay) || this.startDay.isAfter(endDay));
     }
