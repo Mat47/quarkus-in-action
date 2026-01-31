@@ -22,7 +22,8 @@ public class ReservationRepositoryTest {
                 null,
                 348L,
                 LocalDate.now().plusDays(5),
-                LocalDate.now().plusDays(12)
+                LocalDate.now().plusDays(12),
+                null
         ));
 
         assertAll(

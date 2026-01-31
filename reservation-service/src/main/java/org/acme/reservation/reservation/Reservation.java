@@ -6,11 +6,16 @@ public record Reservation(
         Long id,
         Long carId,
         LocalDate startDay,
-        LocalDate endDay
+        LocalDate endDay,
+        String userId
 ) {
 
     public Reservation(long carId, LocalDate start, LocalDate end) {
-        this(null, carId, start, end);
+        this(null, carId, start, end, null);
+    }
+
+    public Reservation(long carId, LocalDate start, LocalDate end, String userId) {
+        this(null, carId, start, end, userId);
     }
 
     public boolean isReserved(LocalDate startDay, LocalDate endDay) {

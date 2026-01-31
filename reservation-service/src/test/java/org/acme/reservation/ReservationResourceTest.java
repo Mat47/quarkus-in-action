@@ -40,7 +40,8 @@ class ReservationResourceTest {
                 null,
                 12345L,
                 LocalDate.parse("2025-03-20"),
-                LocalDate.parse("2025-03-29")
+                LocalDate.parse("2025-03-29"),
+                null
         );
 
         RestAssured

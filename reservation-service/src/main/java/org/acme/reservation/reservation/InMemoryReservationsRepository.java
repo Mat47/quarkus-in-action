@@ -24,7 +24,8 @@ public class InMemoryReservationsRepository implements ReservationsRepository {
                 ids.incrementAndGet(),
                 reservation.carId(),
                 reservation.startDay(),
-                reservation.endDay()
+                reservation.endDay(),
+                null
         );
         store.add(res);
         return res;

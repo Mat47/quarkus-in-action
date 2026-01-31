@@ -2,8 +2,10 @@ package org.acme.reservation.rest;
 
 import io.quarkus.logging.Log;
 import io.smallrye.graphql.client.GraphQLClient;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.SecurityContext;
 import org.acme.reservation.inventory.Car;
 import org.acme.reservation.inventory.GraphQLInventoryClient;
 import org.acme.reservation.inventory.InventoryClient;
@@ -21,6 +23,9 @@ import java.util.Map;
 @Path("reservation")
 @Produces(MediaType.APPLICATION_JSON)
 public class ReservationResource {
+
+    @Inject
+    SecurityContext secContext;
 
     private final ReservationsRepository reservationsRepository;
     private final InventoryClient inventoryClient;
@@ -62,13 +67,35 @@ public class ReservationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Reservation make(Reservation reservation) {
-        var res = reservationsRepository.save(reservation);
-        final String userId = "x"; // dummy value for now
+        var userRes = new Reservation(
+                reservation.carId(),
+                reservation.startDay(),
+                reservation.endDay(),
+                secContext.getUserPrincipal() != null
+                        ? secContext.getUserPrincipal().getName()
+                        : "anonymous"
+        );
+        var res = reservationsRepository.save(userRes);
+
         if (reservation.startDay().equals(LocalDate.now())) {
-            var rental = rentalClient.start(userId, res.id()); // starting rental = calling client interface method making the remote HTTP call
+            var rental = rentalClient.start(res.userId(), res.id()); // starting rental => calling client interface method making the remote HTTP call
             Log.info("Successfully started rental: " + rental);
         }
+
         return res;
+    }
+
+    @GET
+    @Path("all")
+    public Collection<Reservation> allReservations() {
+        String userId = secContext.getUserPrincipal() != null
+                ? secContext.getUserPrincipal().getName()
+                : null;
+
+        return reservationsRepository.findAll()
+                .stream()
+                .filter(r -> userId == null || userId.equals(r.userId()))
+                .toList();
     }
 
 }
