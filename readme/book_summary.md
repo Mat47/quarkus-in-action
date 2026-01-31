@@ -230,7 +230,7 @@ Exposing & consuming APIs using these network protocols
 - GraphQL (good for limiting #requests where amount of transferred data is critical)
 - gRPC (high-performance, open source universal RPC framework)
 
-![img.png](system_architecture.png)
+![img.png](acme_architecture.png)
 
 ## Car Rental Microservices
 
@@ -348,7 +348,7 @@ enables CDI injection
   build
 
 Unit vs Integration test (JVM vs Native mode)
-![img.png](img.png)
+![img.png](5_unit-vs-integration.png)
 
 create a @QuarkusIntegrationTest and an existing JVM test - run it `$ ./mvnw verify -Pnative`
 
@@ -378,7 +378,18 @@ public class MockInventoryClient implements GraphQLInventoryClient
 </dependency>
 ```
 
-# DB access
+# 6 - Exposing & Securing Web Apps
+
+touched OIDC and keycloak previously, build upon that now
+![img_1.png](6_security.png)
+`UserService` passes "security context" to `ReservationService`
+
+Also add a little **frontend**
+
+- _Qute_: server-side templating engine (core Quarkus ext)
+- _HTMX_: client-side toolkit simplifying async communication with the backend - AJAX
+
+# 7 - DB Access
 
 ## Transactions
 
