@@ -384,10 +384,16 @@ touched OIDC and keycloak previously, build upon that now
 ![img_1.png](6_security.png)
 `UserService` passes "security context" to `ReservationService`
 
-Adding a little **frontend** to demo user login/logout
+### Adding a little **frontend** to demo user login/logout
 
 - _Qute_: server-side templating engine (core Quarkus ext)
 - _HTMX_: client-side toolkit simplifying async communication with the backend - AJAX
+
+### Adding security
+
+using **_Keycloak_** (dev service) as **_OIDC provider_** handling user metadata
+
+note: we'll also secure the [reservation service](../rental-service) here (shared Keycloak dev service)
 
 # 7 - DB Access
 
