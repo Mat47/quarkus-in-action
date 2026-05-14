@@ -364,7 +364,9 @@ services)
 ```java 
 // CDI container now chooses this impl over the GraphQLInventoryClient one
 @Mock
-public class MockInventoryClient implements GraphQLInventoryClient
+public class MockInventoryClient implements GraphQLInventoryClient {
+    // ...
+} 
 ```
 
 #### _Mockito_ (framework)
@@ -393,7 +395,7 @@ touched OIDC and keycloak previously, build upon that now
 
 using **_Keycloak_** (dev service) as **_OIDC provider_** handling user metadata
 
-note: we'll also secure the [reservation service](../rental-service) here (shared Keycloak dev service)
+note: we'll also secure the [reservation service](../reservation-service) here (shared Keycloak dev service)
 
 # 7 - DB Access
 
