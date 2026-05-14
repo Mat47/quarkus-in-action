@@ -67,7 +67,7 @@ public class ReservationResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Reservation make(Reservation reservation) {
-        var userRes = new Reservation(
+        var userReservation = new Reservation(
                 reservation.carId(),
                 reservation.startDay(),
                 reservation.endDay(),
@@ -75,7 +75,7 @@ public class ReservationResource {
                         ? secContext.getUserPrincipal().getName()
                         : "anonymous"
         );
-        var res = reservationsRepository.save(userRes);
+        var res = reservationsRepository.save(userReservation);
 
         if (reservation.startDay().equals(LocalDate.now())) {
             var rental = rentalClient.start(res.userId(), res.id()); // starting rental => calling client interface method making the remote HTTP call
